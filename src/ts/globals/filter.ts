@@ -1,6 +1,6 @@
-import isSubSequence from '../utils/isSubSequence.js'
+import { isSubSequence } from '../utils/subSequence.js'
 
-export default function filterByField<T extends Record<string, string>>(
+export function filterByField<T extends Record<string, string>>(
   items: T[],
   field: keyof T,
   query: string,
