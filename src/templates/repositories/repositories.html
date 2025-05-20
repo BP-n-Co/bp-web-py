@@ -8,18 +8,38 @@
   "
   @click="open = true"
   @click.outside="open = false"
+  class="rounded-lg bg-white p-1 text-center shadow-md"
 >
-  <div>
-    <span>Search for Repository</span>
-    <input x-model="repo_owner" placeholder="Owner login" />
-    <input x-model="repo_name" placeholder="Repository name" />
+  <div class="flex gap-2 rounded-sm border-gray-100 bg-gray-100 p-1">
+    <span class="basis-1/2">Search for Repository</span>
+    <input
+      class="flex-1 rounded-sm border-2 border-gray-200 bg-gray-100 text-center"
+      x-model="repo_owner"
+      placeholder="Owner login"
+    />
+    <input
+      class="flex-1 rounded-sm border-2 border-gray-200 bg-gray-100 text-center"
+      x-model="repo_name"
+      placeholder="Repository name"
+    />
   </div>
-  <ul x-show="open" x-cloak>
+  <ul>
     <template x-for="repo in repositories" :key="repo.id">
-      <li @click="repo_to_display_id = repo.id">
-        <span x-text="repo.ownerLogin"></span>
-        <span> - </span>
-        <span x-text="repo.name"></span>
+      <li
+        @click.stop="
+            repo_to_display_id === repo.id
+                ? (repo_to_display_id = '', open = true)
+                : (repo_to_display_id = repo.id, open = false)
+        "
+        x-show="repo.id === repo_to_display_id || open"
+        x-cloak
+        class="flex cursor-pointer border-b border-gray-300 py-2 last:border-b-0 hover:bg-gray-100"
+        :class="repo.id === repo_to_display_id? 'bg-gray-100' : 'bg-white'"
+      >
+        <span class="basis-1/2"></span>
+        <span x-text="repo.ownerLogin" class="flex-1"></span>
+        <span class="basis-1-6">-</span>
+        <span x-text="repo.name" class="flex-1"></span>
       </li>
     </template>
   </ul>
