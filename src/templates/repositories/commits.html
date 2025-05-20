@@ -1,19 +1,55 @@
 <script type="application/json" id="commits-data">
   {{ commits | tojson }}
 </script>
-<div
+<!-- <canvas
+  id="myChart"
   x-data="{ commits: []}"
   x-init="
-    commits = JSON.parse(document.getElementById('commits-data').textContent)
+    commits = JSON.parse(document.getElementById('commits-data').textContent);
+    new Chart($el, {
+      type: 'line',
+      data: {
+        labels: extractDateLabels(commits),
+        datasets: [{
+          label: 'day',
+          data: extractCumulAdditionsPerDay(commits),
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1
+        }]
+      }
+    });
   "
->
-  <ul>
-    <template x-for="commit in commits" :key="commit.id">
-      <li>
-        <span x-text="commit.additions"></span>
-        <span> - </span>
-        <span x-text="commit.deletions"></span>
-      </li>
-    </template>
-  </ul>
-</div>
+></canvas> -->
+<canvas
+  id="myChart"
+  x-data="{ commits: []}"
+  x-init="
+    commits = JSON.parse(document.getElementById('commits-data').textContent);
+    additions = extractAdditionsPerDay(commits);
+    const dataPoints = additions.map(addition => ({
+      x: addition.date,
+      y: addition.additions
+    }));
+    new Chart($el, {
+      type: 'line',
+      data: {
+        datasets: [{
+          label: 'Additions',
+          data: dataPoints,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1,
+        }]
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: 'day'
+            }
+          }
+        }
+      }
+    });
+  "
+></canvas>
