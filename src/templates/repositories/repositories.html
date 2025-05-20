@@ -2,16 +2,22 @@
   {{ repositories | tojson }}
 </script>
 <div
-  x-data="{ repo_name: '', repo_owner: '', open: false, repositories: []}"
-  x-init="
-    repositories = JSON.parse(document.getElementById('repositories-data').textContent)
-  "
+  x-data="{
+    repo_name: '',
+    repo_owner: '',
+    open: false,
+    repositories: [],
+    get filtered() {
+      const byName = filterByField(this.repositories, 'name', this.repo_name);
+      return filterByField(byName, 'ownerLogin', this.repo_owner);
+  }}"
+  x-init="repositories = JSON.parse(document.getElementById('repositories-data').textContent)"
   @click="open = true"
   @click.outside="open = false"
   class="rounded-lg bg-white p-1 text-center shadow-md"
 >
   <div class="flex gap-2 rounded-sm border-gray-100 bg-gray-100 p-1">
-    <span class="basis-1/2">Search for Repository</span>
+    <span class="flex-1">Search for Repository</span>
     <input
       class="flex-1 rounded-sm border-2 border-gray-200 bg-gray-100 text-center"
       x-model="repo_owner"
@@ -24,7 +30,7 @@
     />
   </div>
   <ul>
-    <template x-for="repo in repositories" :key="repo.id">
+    <template x-for="repo in filtered" :key="repo.id">
       <li
         @click.stop="
             repo_to_display_id === repo.id
@@ -36,10 +42,9 @@
         class="flex cursor-pointer border-b border-gray-300 py-2 last:border-b-0 hover:bg-gray-100"
         :class="repo.id === repo_to_display_id? 'bg-gray-100' : 'bg-white'"
       >
-        <span class="basis-1/2"></span>
-        <span x-text="repo.ownerLogin" class="flex-1"></span>
-        <span class="basis-1-6">-</span>
-        <span x-text="repo.name" class="flex-1"></span>
+        <span class="flex-1"></span>
+        <span x-text="repo.ownerLogin" class="flex-1 text-center"></span>
+        <span x-text="repo.name" class="flex-1 text-center"></span>
       </li>
     </template>
   </ul>

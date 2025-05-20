@@ -1,2 +1,2 @@
-import searchComponent from "./components/searchComponent.js";
-window.searchComponent = searchComponent;
+import filterByField from './components/filterByField.js';
+window.filterByField = filterByField;
