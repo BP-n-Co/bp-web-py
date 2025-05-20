@@ -43,8 +43,14 @@
         :class="repo.id === repo_to_display_id? 'bg-gray-100' : 'bg-white'"
       >
         <span class="flex-1"></span>
-        <span x-text="repo.ownerLogin" class="flex-1 text-center"></span>
-        <span x-text="repo.name" class="flex-1 text-center"></span>
+        <span
+          x-html="highlightSubSequence(repo_owner, repo.ownerLogin)"
+          class="flex-1 text-center"
+        ></span>
+        <span
+          x-html="highlightSubSequence(repo_name, repo.name)"
+          class="flex-1 text-center"
+        ></span>
       </li>
     </template>
   </ul>

@@ -1,5 +1,5 @@
-import filterByField from './components/filterByField.js'
-
+import { filterByField } from './globals/filter.js'
+import { highlightSubSequence } from './globals/subSequence.js'
 declare global {
   interface Window {
     filterByField: <T extends Record<string, string>>(
@@ -7,7 +7,9 @@ declare global {
       field: keyof T,
       query: string,
     ) => T[]
+    highlightSubSequence: (sub: string, str: string) => string
   }
 }
 
 window.filterByField = filterByField
+window.highlightSubSequence = highlightSubSequence
