@@ -1,6 +1,4 @@
-export function extractDateLabels<T extends Record<string, string>>(
-  commits: T[],
-): string[] {
+export function extractDateLabels(commits: Record<string, any>[]): string[] {
   const dateArray: string[] = []
   const seenDates: Set<string> = new Set()
   for (let i = 0; i < commits.length; i++) {
@@ -10,14 +8,11 @@ export function extractDateLabels<T extends Record<string, string>>(
       seenDates.add(date)
     }
   }
-  console.log(dateArray)
 
   return dateArray
 }
 
-export function extractAdditionsPerDay<T extends Record<string, any>>(
-  commits: T[],
-): {
+export function extractAdditionsPerDay(commits: Record<string, any>[]): {
   date: string
   additions: number
 }[] {
@@ -27,19 +22,16 @@ export function extractAdditionsPerDay<T extends Record<string, any>>(
     const additions = commits[i].additions
     mapDateAdditions.set(date, (mapDateAdditions.get(date) ?? 0) + additions)
   }
-  console.log(mapDateAdditions)
 
   const datesIncluded = extractDateLabels(commits)
-  console.log(datesIncluded)
   let additionsPerDay = datesIncluded.map((date) => {
     return { date: date, additions: mapDateAdditions.get(date) ?? 0 }
   })
-  console.log(additionsPerDay)
   return additionsPerDay
 }
 
-export function extractCumulAdditionsPerDay<T extends Record<string, any>>(
-  commits: T[],
+export function extractCumulAdditionsPerDay(
+  commits: Record<string, any>[],
 ): number[] {
   const mapDateAdditions = new Map<string, number>()
 

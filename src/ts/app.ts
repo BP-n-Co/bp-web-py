@@ -13,21 +13,17 @@ declare global {
       query: string,
     ) => T[]
     highlightSubSequence: (sub: string, str: string) => string
-    extractAdditionsPerDay: <T extends Record<string, any>>(
-      commits: T[],
-    ) => {
+    extractDateLabels: (commits: Record<string, any>[]) => string[]
+    extractAdditionsPerDay: (commits: Record<string, any>[]) => {
       date: string
       additions: number
     }[]
-    extractDateLabels: <T extends Record<string, any>>(commits: T[]) => string[]
-    extractCumulAdditionsPerDay: <T extends Record<string, any>>(
-      commits: T[],
-    ) => number[]
+    extractCumulAdditionsPerDay: (commits: Record<string, any>[]) => number[]
   }
 }
 
 window.filterByField = filterByField
 window.highlightSubSequence = highlightSubSequence
-window.extractAdditionsPerDay = extractAdditionsPerDay
 window.extractDateLabels = extractDateLabels
+window.extractAdditionsPerDay = extractAdditionsPerDay
 window.extractCumulAdditionsPerDay = extractCumulAdditionsPerDay
