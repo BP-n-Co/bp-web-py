@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Repositories</title>
+
+    <!-- Tailwind via CDN (good for dev) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- HTMX via CDN -->
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+
+    <!-- JS -->
+    <script type="module" src="/static/js/app.js"></script>
+    <!-- Alpine -->
+    <script
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+      defer
+    ></script>
+    <script>
+      document.addEventListener('htmx:afterSwap', (e) => {
+        Alpine.initTree(e.target)
+      })
+    </script>
+    <style>
+      [x-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100 p-8 text-center">
+    <h1 class="mb-4 text-3xl font-bold text-indigo-600">
+      Repository commits analyser
+    </h1>
+
+    <div
+      x-data="{ repo_to_display_id: '' }"
+      x-init="
+        $watch('repo_to_display_id', () => {
+            $el.dispatchEvent(new CustomEvent('repoChanged'))
+        })
+      "
+      id="repo-root"
+      class="rounded-lg bg-white p-4 text-center shadow-md"
+    >
+      <div
+        hx-get="/repositories/get_repos"
+        hx-trigger="load"
+        hx-swap="outerHTML"
+      ></div>
+      <div
+        x-cloak
+        x-show="repo_to_display_id != ''"
+        hx-get="/repositories/get_commits"
+        :hx-vals="JSON.stringify({repo_to_display_id})"
+        hx-trigger="repoChanged from:#repo-root"
+        hx-swap="innerHTML"
+      ></div>
+    </div>
+    <!-- <div x-data="{ count: 0 }">
+      <button @mouseover="count++">Increment</button>
+
+      <span x-text="count * 2"></span>
+    </div>
+
+    <div
+      x-data
+      @mouseover="console.log('mouseover')"
+      @mouseenter="console.log('mouseenter')"
+    >
+      <div class="bg-gray-200 p-4">
+        Hover over me
+        <button class="ml-2">Child</button>
+      </div>
+    </div>
+
+    <div x-data="searchComponent()">
+      <input x-model="search" placeholder="Search..." />
+
+      <ul>
+        <template x-for="item in filteredItems" :key="item">
+          <li x-text="item"></li>
+        </template>
+      </ul>
+    </div>
+    </div> -->
+  </body>
+</html>
