@@ -1,0 +1,19 @@
+<script type="application/json" id="commits-data">
+  {{ commits | tojson }}
+</script>
+<div
+  x-data="{ commits: []}"
+  x-init="
+    commits = JSON.parse(document.getElementById('commits-data').textContent)
+  "
+>
+  <ul>
+    <template x-for="commit in commits" :key="commit.id">
+      <li>
+        <span x-text="commit.additions"></span>
+        <span> - </span>
+        <span x-text="commit.deletions"></span>
+      </li>
+    </template>
+  </ul>
+</div>

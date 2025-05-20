@@ -1,0 +1,26 @@
+<script type="application/json" id="repositories-data">
+  {{ repositories | tojson }}
+</script>
+<div
+  x-data="{ repo_name: '', repo_owner: '', open: false, repositories: []}"
+  x-init="
+    repositories = JSON.parse(document.getElementById('repositories-data').textContent)
+  "
+  @click="open = true"
+  @click.outside="open = false"
+>
+  <div>
+    <span>Search for Repository</span>
+    <input x-model="repo_owner" placeholder="Owner login" />
+    <input x-model="repo_name" placeholder="Repository name" />
+  </div>
+  <ul x-show="open" x-cloak>
+    <template x-for="repo in repositories" :key="repo.id">
+      <li @click="repo_to_display_id = repo.id">
+        <span x-text="repo.ownerLogin"></span>
+        <span> - </span>
+        <span x-text="repo.name"></span>
+      </li>
+    </template>
+  </ul>
+</div>
