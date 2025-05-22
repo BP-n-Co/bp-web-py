@@ -12,6 +12,10 @@
 
     <!-- JS -->
     <script type="module" src="/static/js/app.js"></script>
+    <!-- Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
+
     <!-- Alpine -->
     <script
       src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
@@ -57,32 +61,5 @@
         hx-swap="innerHTML"
       ></div>
     </div>
-    <!-- <div x-data="{ count: 0 }">
-      <button @mouseover="count++">Increment</button>
-
-      <span x-text="count * 2"></span>
-    </div>
-
-    <div
-      x-data
-      @mouseover="console.log('mouseover')"
-      @mouseenter="console.log('mouseenter')"
-    >
-      <div class="bg-gray-200 p-4">
-        Hover over me
-        <button class="ml-2">Child</button>
-      </div>
-    </div>
-
-    <div x-data="searchComponent()">
-      <input x-model="search" placeholder="Search..." />
-
-      <ul>
-        <template x-for="item in filteredItems" :key="item">
-          <li x-text="item"></li>
-        </template>
-      </ul>
-    </div>
-    </div> -->
   </body>
 </html>

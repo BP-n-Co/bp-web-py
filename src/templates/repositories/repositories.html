@@ -35,7 +35,9 @@
         @click.stop="
             repo_to_display_id === repo.id
                 ? (repo_to_display_id = '', open = true)
-                : (repo_to_display_id = repo.id, open = false)
+                : (repo_to_display_id = repo.id, open = false);
+            repo_name = '';
+            repo_owner = '';
         "
         x-show="repo.id === repo_to_display_id || open"
         x-cloak
