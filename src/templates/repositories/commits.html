@@ -5,7 +5,8 @@
   id="myChart"
   x-data="{ commits: []}"
   x-init="
-    commits = JSON.parse(document.getElementById('commits-data').textContent);
+    unsorted_commits = JSON.parse(document.getElementById('commits-data').textContent);
+    commits = unsorted_commits.sort((a, b) => b.committedDate.localeCompare(a.committedDate));
     additions = extractAdditionsPerDay(commits);
     const dataPoints = additions.map(addition => ({
       x: addition.date,
@@ -22,6 +23,7 @@
         }]
       },
       options: {
+        animation: false,
         scales: {
           x: {
             type: 'time',

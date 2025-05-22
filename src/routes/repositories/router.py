@@ -34,7 +34,5 @@ async def get_commits(request: Request, repo_to_display_id: str) -> HTMLResponse
     return templates.TemplateResponse(
         request=request,
         name="commits.html",
-        context=dict(
-            commits=sorted(resp_data, key=lambda c: c["committedDate"], reverse=True)
-        ),
+        context=dict(commits=resp_data),
     )
