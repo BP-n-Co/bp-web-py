@@ -12,22 +12,30 @@ export function extractDateLabels(commits: Record<string, any>[]): string[] {
   return dateArray
 }
 
-export function extractAdditionsPerDay(commits: Record<string, any>[]): {
+export function extractModificationsPerDay<T extends Record<string, any>>(
+  commits: T[],
+  keys: (keyof T)[],
+): {
   date: string
-  additions: number
+  modifications: number
 }[] {
-  const mapDateAdditions = new Map<string, number>()
-  for (let i = 0; i < commits.length; i++) {
-    const date = commits[i].committedDate.slice(0, 10)
-    const additions = commits[i].additions
-    mapDateAdditions.set(date, (mapDateAdditions.get(date) ?? 0) + additions)
+  const mapDateModifications = new Map<string, number>()
+  for (let ic = 0; ic < commits.length; ic++) {
+    for (let ik = 0; ik < keys.length; ik++) {
+      const date = commits[ic]['committedDate'].slice(0, 10)
+      const modifications = commits[ic][keys[ik]]
+      mapDateModifications.set(
+        date,
+        (mapDateModifications.get(date) ?? 0) + modifications,
+      )
+    }
   }
 
-  const datesIncluded = extractDateLabels(commits)
-  let additionsPerDay = datesIncluded.map((date) => {
-    return { date: date, additions: mapDateAdditions.get(date) ?? 0 }
+  const dates = extractDateLabels(commits)
+  let modificationsPerDay = dates.map((date) => {
+    return { date: date, modifications: mapDateModifications.get(date) ?? 0 }
   })
-  return additionsPerDay
+  return modificationsPerDay
 }
 
 export function extractCumulAdditionsPerDay(

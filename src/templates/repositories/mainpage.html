@@ -21,11 +21,6 @@
       src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
       defer
     ></script>
-    <script>
-      document.addEventListener('htmx:afterSwap', (e) => {
-        Alpine.initTree(e.target)
-      })
-    </script>
     <style>
       [x-cloak] {
         display: none;
@@ -42,7 +37,9 @@
       x-data="{ repo_to_display_id: '' }"
       x-init="
         $watch('repo_to_display_id', () => {
-            $el.dispatchEvent(new CustomEvent('repoChanged'))
+            if (repo_to_display_id !== '') {
+                $el.dispatchEvent(new CustomEvent('repoChanged'))
+            }
         })
       "
       id="repo-root"
@@ -52,14 +49,14 @@
         hx-trigger="load"
         hx-swap="outerHTML"
       ></div>
-      <div
-        x-cloak
-        x-show="repo_to_display_id != ''"
+      <span
         hx-get="/repositories/get_commits"
         :hx-vals="JSON.stringify({repo_to_display_id})"
         hx-trigger="repoChanged from:#repo-root"
+        hx-target="#commits-graph"
         hx-swap="innerHTML"
-      ></div>
+      ></span>
+      <div id="commits-graph" x-cloak x-show="repo_to_display_id !== ''"></div>
     </div>
   </body>
 </html>
