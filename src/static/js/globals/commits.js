@@ -10,20 +10,22 @@ export function extractDateLabels(commits) {
     }
     return dateArray;
 }
-export function extractAdditionsPerDay(commits) {
+export function extractModificationsPerDay(commits, keys) {
     var _a;
-    const mapDateAdditions = new Map();
-    for (let i = 0; i < commits.length; i++) {
-        const date = commits[i].committedDate.slice(0, 10);
-        const additions = commits[i].additions;
-        mapDateAdditions.set(date, ((_a = mapDateAdditions.get(date)) !== null && _a !== void 0 ? _a : 0) + additions);
+    const mapDateModifications = new Map();
+    for (let ic = 0; ic < commits.length; ic++) {
+        for (let ik = 0; ik < keys.length; ik++) {
+            const date = commits[ic]['committedDate'].slice(0, 10);
+            const modifications = commits[ic][keys[ik]];
+            mapDateModifications.set(date, ((_a = mapDateModifications.get(date)) !== null && _a !== void 0 ? _a : 0) + modifications);
+        }
     }
-    const datesIncluded = extractDateLabels(commits);
-    let additionsPerDay = datesIncluded.map((date) => {
+    const dates = extractDateLabels(commits);
+    let modificationsPerDay = dates.map((date) => {
         var _a;
-        return { date: date, additions: (_a = mapDateAdditions.get(date)) !== null && _a !== void 0 ? _a : 0 };
+        return { date: date, modifications: (_a = mapDateModifications.get(date)) !== null && _a !== void 0 ? _a : 0 };
     });
-    return additionsPerDay;
+    return modificationsPerDay;
 }
 export function extractCumulAdditionsPerDay(commits) {
     const mapDateAdditions = new Map();
