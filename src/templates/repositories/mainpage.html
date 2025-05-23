@@ -38,9 +38,7 @@
       x-init="
         $watch('repo_to_display_id', () => {
             if (repo_to_display_id !== '') {
-                $nextTick(() => {
-                    $el.dispatchEvent(new CustomEvent('repoChanged'))
-                })
+                $el.dispatchEvent(new CustomEvent('repoChanged'))
             }
         })
       "
@@ -58,7 +56,7 @@
         hx-target="#commits-graph"
         hx-swap="innerHTML"
       ></span>
-      <div id="commits-graph"></div>
+      <div id="commits-graph" x-cloak x-show="repo_to_display_id !== ''"></div>
     </div>
   </body>
 </html>
