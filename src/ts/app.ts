@@ -1,9 +1,9 @@
 import { filterByField } from './globals/filter.js'
 import { highlightSubSequence } from './globals/subSequence.js'
 import {
-  extractAdditionsPerDay,
   extractDateLabels,
   extractCumulAdditionsPerDay,
+  extractModificationsPerDay,
 } from './globals/commits.js'
 declare global {
   interface Window {
@@ -14,9 +14,12 @@ declare global {
     ) => T[]
     highlightSubSequence: (sub: string, str: string) => string
     extractDateLabels: (commits: Record<string, any>[]) => string[]
-    extractAdditionsPerDay: (commits: Record<string, any>[]) => {
+    extractModificationsPerDay: <T extends Record<string, string>>(
+      commits: T[],
+      keys: (keyof T)[],
+    ) => {
       date: string
-      additions: number
+      modifications: number
     }[]
     extractCumulAdditionsPerDay: (commits: Record<string, any>[]) => number[]
   }
@@ -25,5 +28,5 @@ declare global {
 window.filterByField = filterByField
 window.highlightSubSequence = highlightSubSequence
 window.extractDateLabels = extractDateLabels
-window.extractAdditionsPerDay = extractAdditionsPerDay
+window.extractModificationsPerDay = extractModificationsPerDay
 window.extractCumulAdditionsPerDay = extractCumulAdditionsPerDay

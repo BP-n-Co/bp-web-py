@@ -1,6 +1,4 @@
-<script type="application/json" id="repositories-data">
-  {{ repositories | tojson }}
-</script>
+<!-- prettier-ignore-attribute (x-init) -->
 <div
   x-data="{
     repo_name: '',
@@ -11,7 +9,7 @@
       const byName = filterByField(this.repositories, 'name', this.repo_name);
       return filterByField(byName, 'ownerLogin', this.repo_owner);
   }}"
-  x-init="repositories = JSON.parse(document.getElementById('repositories-data').textContent)"
+  x-init='repositories = JSON.parse(`{{ repositories | tojson(indent=None) | safe }}`)''
   @click="open = true"
   @click.outside="open = false"
   class="rounded-lg bg-white p-1 text-center shadow-md"
@@ -37,10 +35,8 @@
                 ? (repo_to_display_id = '', open = true)
                 : (repo_to_display_id = repo.id, open = false);
             repo_name = '';
-            repo_owner = '';
         "
         x-show="repo.id === repo_to_display_id || open"
-        x-cloak
         class="flex cursor-pointer border-b border-gray-300 py-2 last:border-b-0 hover:bg-gray-100"
         :class="repo.id === repo_to_display_id? 'bg-gray-100' : 'bg-white'"
       >
