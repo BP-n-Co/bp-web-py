@@ -1,26 +1,66 @@
-<!-- prettier-ignore-attribute (x-init) -->
-<canvas
-  id="myChart"
-  x-data="{ commits: []}"
-  x-init='
+<div x-data="{ selected: 'Deletions' }">
+  <p class="mb-2 font-bold">Choose an option:</p>
+
+  <label class="block">
+    <input type="radio" name="option" value="Additions" x-model="selected" />
+    Additions
+  </label>
+
+  <label class="block">
+    <input type="radio" name="option" value="Deletions" x-model="selected" />
+    Deletions
+  </label>
+
+  <label class="block">
+    <input
+      type="radio"
+      name="option"
+      value="Modifications"
+      x-model="selected"
+    />
+    Modifications
+  </label>
+
+  <!-- prettier-ignore -->
+  <canvas
+    id="myChart"
+    x-data="{ commits: [], chart: null }"
+    x-init='
     unsorted_commits = JSON.parse(`{{ commits | tojson(indent=none) | safe }}`);
     commits = unsorted_commits.sort((a, b) => b.committedDate.localeCompare(a.committedDate));
-    modifications = extractModificationsPerDay(commits, ["additions"]);
+    '
+    x-effect='
+    if (selected === "Additions") {
+        keys = ["additions"];
+    } else if (selected === "Deletions") {
+        keys = ["deletions"];
+    } else {
+        keys = ["additions", "deletions"];
+    }
+    const modifications = extractModificationsPerDay(commits, keys);
     const dataPoints = modifications.map(modification => ({
       x: modification.date,
       y: modification.modifications
     }));
-    new Chart($el, {
+    if (chart) {
+      chart.destroy()
+    }
+    chart = new Chart($el, {
       type: "line",
       data: {
         datasets: [{
-          label: "Additions",
+          label: selected,
           data: dataPoints,
           borderColor: "rgb(75, 192, 192)",
           tension: 0.1,
         }]
       },
       options: {
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
         scales: {
           x: {
             type: "time",
@@ -31,5 +71,6 @@
         }
       }
     });
-  '
-></canvas>
+    '
+  ></canvas>
+</div>
