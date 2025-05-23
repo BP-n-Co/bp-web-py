@@ -21,7 +21,6 @@
     Modifications
   </label>
 
-  </div>
   <!-- prettier-ignore -->
   <canvas
     id="myChart"
@@ -57,6 +56,11 @@
         }]
       },
       options: {
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
         scales: {
           x: {
             type: "time",
