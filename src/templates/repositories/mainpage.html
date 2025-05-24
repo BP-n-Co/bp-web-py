@@ -35,7 +35,7 @@
 
     <div
       x-data="{ repo_to_display_id: '' }"
-      x-effect="if (repo_to_display_id !== '') {$el.dispatchEvent(new CustomEvent('repoChanged'))}"
+      x-effect="if (repo_to_display_id !== '') {setTimeout(() => {$el.dispatchEvent(new CustomEvent('repoChanged'))}, 0)}"
       id="repo-root"
     >
       <div
@@ -50,7 +50,12 @@
         hx-target="#commits-graph"
         hx-swap="innerHTML"
       ></span>
-      <div id="commits-graph" x-cloak x-show="repo_to_display_id !== ''"></div>
+      <div
+        id="commits-graph"
+        x-cloak
+        x-show="repo_to_display_id !== ''"
+        x-data="{ selected: 'Additions', cumul: false, commits: [], chart: null }"
+      ></div>
     </div>
   </body>
 </html>

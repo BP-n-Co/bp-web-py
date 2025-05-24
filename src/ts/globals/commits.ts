@@ -15,6 +15,7 @@ export function extractDateLabels(commits: Record<string, any>[]): string[] {
 export function extractModificationsPerDay<T extends Record<string, any>>(
   commits: T[],
   keys: (keyof T)[],
+  cumul?: boolean,
 ): {
   date: string
   modifications: number
@@ -35,39 +36,11 @@ export function extractModificationsPerDay<T extends Record<string, any>>(
   let modificationsPerDay = dates.map((date) => {
     return { date: date, modifications: mapDateModifications.get(date) ?? 0 }
   })
+  if (cumul) {
+    for (let i = modificationsPerDay.length - 1; i > 0; i--) {
+      modificationsPerDay[i - 1].modifications +=
+        modificationsPerDay[i].modifications
+    }
+  }
   return modificationsPerDay
-}
-
-export function extractCumulAdditionsPerDay(
-  commits: Record<string, any>[],
-): number[] {
-  const mapDateAdditions = new Map<string, number>()
-
-  for (let i = 0; i < commits.length; i++) {
-    const date = commits[i].committedDate.slice(0, 10)
-    const additions = commits[i].additions
-    const prev = mapDateAdditions.get(date)
-    !prev
-      ? mapDateAdditions.set(date, additions)
-      : mapDateAdditions.set(date, prev + additions)
-  }
-  console.log(mapDateAdditions)
-
-  const datesIncluded = extractDateLabels(commits)
-  console.log(datesIncluded)
-  if (datesIncluded.length === 0) {
-    return []
-  }
-
-  const firstDayAddition = mapDateAdditions.get(datesIncluded[0])
-  const additionsCumul = [!firstDayAddition ? 0 : firstDayAddition]
-  for (let i = 1; i < datesIncluded.length; i++) {
-    const date = datesIncluded[i]
-    const additions = mapDateAdditions.get(date)
-    additionsCumul.push(
-      !additions ? additionsCumul[i - 1] : additionsCumul[i - 1] + additions,
-    )
-  }
-  console.log(additionsCumul)
-  return additionsCumul
 }
