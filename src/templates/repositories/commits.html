@@ -1,32 +1,47 @@
-<div x-data="{ selected: 'Deletions' }">
-  <p class="mb-2 font-bold">Choose an option:</p>
+<div>
+  <div class="flex">
+    <div class="w-1/2">
+      <label class="block">
+        <input
+          type="radio"
+          name="option"
+          value="Additions"
+          x-model="selected"
+        />
+        Additions
+      </label>
 
-  <label class="block">
-    <input type="radio" name="option" value="Additions" x-model="selected" />
-    Additions
-  </label>
+      <label class="block">
+        <input
+          type="radio"
+          name="option"
+          value="Deletions"
+          x-model="selected"
+        />
+        Deletions
+      </label>
 
-  <label class="block">
-    <input type="radio" name="option" value="Deletions" x-model="selected" />
-    Deletions
-  </label>
-
-  <label class="block">
-    <input
-      type="radio"
-      name="option"
-      value="Modifications"
-      x-model="selected"
-    />
-    Modifications
-  </label>
+      <label class="block">
+        <input
+          type="radio"
+          name="option"
+          value="Modifications"
+          x-model="selected"
+        />
+        Modifications
+      </label>
+    </div>
+    <div class="w-1/2">
+      <span>Cumulative</span>
+      <input type="checkbox" x-model="cumul" />
+    </div>
+  </div>
 
   <!-- prettier-ignore -->
   <canvas
     id="myChart"
-    x-data="{ commits: [], chart: null }"
     x-init='
-    unsorted_commits = JSON.parse(`{{ commits | tojson(indent=none) | safe }}`);
+    const unsorted_commits = JSON.parse(`{{ commits | tojson(indent=none) | safe }}`);
     commits = unsorted_commits.sort((a, b) => b.committedDate.localeCompare(a.committedDate));
     '
     x-effect='
@@ -37,7 +52,7 @@
     } else {
         keys = ["additions", "deletions"];
     }
-    const modifications = extractModificationsPerDay(commits, keys);
+    const modifications = extractModificationsPerDay(commits, keys, cumul);
     const dataPoints = modifications.map(modification => ({
       x: modification.date,
       y: modification.modifications
@@ -67,6 +82,9 @@
             time: {
               unit: "day"
             }
+          },
+          y: {
+            beginAtZero: true
           }
         }
       }

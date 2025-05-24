@@ -10,7 +10,7 @@ export function extractDateLabels(commits) {
     }
     return dateArray;
 }
-export function extractModificationsPerDay(commits, keys) {
+export function extractModificationsPerDay(commits, keys, cumul) {
     var _a;
     const mapDateModifications = new Map();
     for (let ic = 0; ic < commits.length; ic++) {
@@ -25,31 +25,11 @@ export function extractModificationsPerDay(commits, keys) {
         var _a;
         return { date: date, modifications: (_a = mapDateModifications.get(date)) !== null && _a !== void 0 ? _a : 0 };
     });
+    if (cumul) {
+        for (let i = modificationsPerDay.length - 1; i > 0; i--) {
+            modificationsPerDay[i - 1].modifications +=
+                modificationsPerDay[i].modifications;
+        }
+    }
     return modificationsPerDay;
-}
-export function extractCumulAdditionsPerDay(commits) {
-    const mapDateAdditions = new Map();
-    for (let i = 0; i < commits.length; i++) {
-        const date = commits[i].committedDate.slice(0, 10);
-        const additions = commits[i].additions;
-        const prev = mapDateAdditions.get(date);
-        !prev
-            ? mapDateAdditions.set(date, additions)
-            : mapDateAdditions.set(date, prev + additions);
-    }
-    console.log(mapDateAdditions);
-    const datesIncluded = extractDateLabels(commits);
-    console.log(datesIncluded);
-    if (datesIncluded.length === 0) {
-        return [];
-    }
-    const firstDayAddition = mapDateAdditions.get(datesIncluded[0]);
-    const additionsCumul = [!firstDayAddition ? 0 : firstDayAddition];
-    for (let i = 1; i < datesIncluded.length; i++) {
-        const date = datesIncluded[i];
-        const additions = mapDateAdditions.get(date);
-        additionsCumul.push(!additions ? additionsCumul[i - 1] : additionsCumul[i - 1] + additions);
-    }
-    console.log(additionsCumul);
-    return additionsCumul;
 }
