@@ -1,44 +1,33 @@
-<div>
-  <div class="flex">
-    <div class="w-1/2">
-      <label class="block">
-        <input
-          type="radio"
-          name="option"
-          value="Additions"
-          x-model="selected"
-        />
-        Additions
-      </label>
+<div class="flex">
+  <div class="w-1/2">
+    <label class="block">
+      <input type="radio" name="option" value="Additions" x-model="selected" />
+      Additions
+    </label>
 
-      <label class="block">
-        <input
-          type="radio"
-          name="option"
-          value="Deletions"
-          x-model="selected"
-        />
-        Deletions
-      </label>
+    <label class="block">
+      <input type="radio" name="option" value="Deletions" x-model="selected" />
+      Deletions
+    </label>
 
-      <label class="block">
-        <input
-          type="radio"
-          name="option"
-          value="Modifications"
-          x-model="selected"
-        />
-        Modifications
-      </label>
-    </div>
-    <div class="w-1/2">
-      <span>Cumulative</span>
-      <input type="checkbox" x-model="cumul" />
-    </div>
+    <label class="block">
+      <input
+        type="radio"
+        name="option"
+        value="Modifications"
+        x-model="selected"
+      />
+      Modifications
+    </label>
   </div>
+  <div class="w-1/2">
+    <span>Cumulative</span>
+    <input type="checkbox" x-model="cumul" />
+  </div>
+</div>
 
-  <!-- prettier-ignore -->
-  <canvas
+<!-- prettier-ignore -->
+<canvas
     id="myChart"
     x-init='
     const unsorted_commits = JSON.parse(`{{ commits | tojson(indent=none) | safe }}`);
@@ -91,4 +80,3 @@
     });
     '
   ></canvas>
-</div>
