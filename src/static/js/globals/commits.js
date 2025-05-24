@@ -10,11 +10,14 @@ export function extractDateLabels(commits) {
     }
     return dateArray;
 }
-export function extractModificationsPerDay(commits, keys, cumul) {
+export function extractModificationsPerDay(commits, keys, cumul, selectedAuthor) {
     var _a;
     const mapDateModifications = new Map();
     for (let ic = 0; ic < commits.length; ic++) {
         for (let ik = 0; ik < keys.length; ik++) {
+            if (selectedAuthor && selectedAuthor !== commits[ic].authorName) {
+                continue;
+            }
             const date = commits[ic]['committedDate'].slice(0, 10);
             const modifications = commits[ic][keys[ik]];
             mapDateModifications.set(date, ((_a = mapDateModifications.get(date)) !== null && _a !== void 0 ? _a : 0) + modifications);
@@ -32,4 +35,15 @@ export function extractModificationsPerDay(commits, keys, cumul) {
         }
     }
     return modificationsPerDay;
+}
+export function extractAuthors(commits) {
+    const mapNameAvatarUrl = new Map();
+    for (let i = 0; i < commits.length; i++) {
+        mapNameAvatarUrl.set(commits[i].authorName, commits[i].authorAvatarUrl);
+    }
+    const authors = Array.from(mapNameAvatarUrl).map(([name, url]) => ({
+        name: name,
+        avatarUrl: url,
+    }));
+    return authors;
 }
