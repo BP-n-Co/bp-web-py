@@ -87,7 +87,7 @@ export function extractAuthors(commits) {
     }));
     return authors;
 }
-export function minMaxDates(commits) {
+export function minMaxDatesMs(commits) {
     const dates = extractDateLabels(commits);
     const datesNumber = dates.map((date) => new Date(date).getTime());
     const minMax = {

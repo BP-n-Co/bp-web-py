@@ -1,10 +1,10 @@
 import { filterByField } from './globals/filter.js';
 import { highlightSubSequence } from './globals/subSequence.js';
-import { extractModificationsPerDay, extractAuthors, minMaxDates, } from './globals/commits.js';
+import { extractModificationsPerDay, extractAuthors, minMaxDatesMs, } from './globals/commits.js';
 import { slider } from './globals/slider.js';
 window.filterByField = filterByField;
 window.highlightSubSequence = highlightSubSequence;
 window.extractModificationsPerDay = extractModificationsPerDay;
 window.extractAuthors = extractAuthors;
 window.slider = slider;
-window.minMaxDates = minMaxDates;
+window.minMaxDatesMs = minMaxDatesMs;
