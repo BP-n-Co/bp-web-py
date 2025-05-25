@@ -25,11 +25,60 @@
       [x-cloak] {
         display: none;
       }
+
+      /* Hide default range styling */
+      input[type='range'] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        position: absolute;
+        background: transparent;
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      /* Custom track (hidden default) */
+      input[type='range']::-webkit-slider-runnable-track {
+        height: 2px;
+      }
+
+      /* Custom thumb styling (Centered) */
+      input[type='range']::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        background: white;
+        border: 3px solid #4f46e5;
+        border-radius: 50%;
+        cursor: pointer;
+        pointer-events: auto;
+        position: relative;
+        z-index: 3;
+        transform: translateY(-30%);
+      }
+
+      input[type='range']::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border: 3px solid #4f46e5;
+        border-radius: 50%;
+        cursor: pointer;
+        pointer-events: auto;
+        z-index: 3;
+        transform: translateY(-30%);
+      }
+
+      /* Centering the range input itself */
+      .slider-container {
+        position: relative;
+        height: 18px; /* Adjust height to fit thumb */
+      }
     </style>
   </head>
 
-  <body class="bg-gray-100 p-8 text-center">
-    <h1 class="mb-4 text-3xl font-bold text-indigo-600">
+  <body class="bg-gray-100 p-8">
+    <h1 class="mb-4 text-center text-3xl font-bold text-indigo-600">
       Repository commits analyser
     </h1>
 
@@ -50,12 +99,7 @@
         hx-target="#commits-graph"
         hx-swap="innerHTML"
       ></span>
-      <div
-        id="commits-graph"
-        x-cloak
-        x-show="repo_to_display_id !== ''"
-        x-data="{ selectedModif: 'Additions', cumul: false, commits: [], chart: null, authors: [], selectedAuthor: '' }"
-      ></div>
+      <div id="commits-graph" x-cloak x-show="repo_to_display_id !== ''"></div>
     </div>
   </body>
 </html>
