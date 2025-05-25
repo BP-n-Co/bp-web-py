@@ -4,6 +4,7 @@ import {
   extractModificationsPerDay,
   extractAuthors,
 } from './globals/commits.js'
+import { slider } from './globals/slider.js'
 declare global {
   interface Window {
     filterByField: <T extends Record<string, string>>(
@@ -24,6 +25,19 @@ declare global {
     extractAuthors(
       commits: Record<string, any>,
     ): { name: string; avatarUrl: string }[]
+    priceSlider(
+      min: number,
+      max: number,
+      minGap: number,
+    ): {
+      min: number
+      max: number
+      minGap: number
+      readonly minPercent: number
+      readonly maxPercent: number
+      update(event: Event): void
+      init(): void
+    }
   }
 }
 
@@ -31,3 +45,4 @@ window.filterByField = filterByField
 window.highlightSubSequence = highlightSubSequence
 window.extractModificationsPerDay = extractModificationsPerDay
 window.extractAuthors = extractAuthors
+window.priceSlider = slider
