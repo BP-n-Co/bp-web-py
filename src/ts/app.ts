@@ -3,6 +3,7 @@ import { highlightSubSequence } from './globals/subSequence.js'
 import {
   extractModificationsPerDay,
   extractAuthors,
+  minMaxDates,
 } from './globals/commits.js'
 import { slider } from './globals/slider.js'
 declare global {
@@ -18,6 +19,8 @@ declare global {
       keys: (keyof T)[],
       cumul?: boolean,
       selectedAuthor?: string,
+      minRelative?: number,
+      maxRelative?: number,
     ) => {
       date: string
       modifications: number
@@ -25,19 +28,18 @@ declare global {
     extractAuthors(
       commits: Record<string, any>,
     ): { name: string; avatarUrl: string }[]
-    priceSlider(
-      min: number,
-      max: number,
-      minGap: number,
-    ): {
-      min: number
-      max: number
+    slider(minGap: number): {
+      minRelative: number
+      minAbsolute: number
+      maxRelative: number
+      maxAbsolute: number
       minGap: number
       readonly minPercent: number
       readonly maxPercent: number
       update(event: Event): void
       init(): void
     }
+    minMaxDates(commits: Record<string, any>[]): { min: number; max: number }
   }
 }
 
@@ -45,4 +47,5 @@ window.filterByField = filterByField
 window.highlightSubSequence = highlightSubSequence
 window.extractModificationsPerDay = extractModificationsPerDay
 window.extractAuthors = extractAuthors
-window.priceSlider = slider
+window.slider = slider
+window.minMaxDates = minMaxDates

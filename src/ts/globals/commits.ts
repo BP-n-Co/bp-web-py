@@ -1,7 +1,17 @@
-export function extractDateLabels(commits: Record<string, any>[]): string[] {
+export function extractDateLabels(
+  commits: Record<string, any>[],
+  fromMs?: number,
+  untilMs?: number,
+): string[] {
   const dateArray: string[] = []
   const seenDates: Set<string> = new Set()
   for (let i = 0; i < commits.length; i++) {
+    if (fromMs && new Date(commits[i].committedDate).getTime() < fromMs) {
+      continue
+    }
+    if (untilMs && new Date(commits[i].committedDate).getTime() > untilMs) {
+      continue
+    }
     const date = commits[i].committedDate.slice(0, 10)
     if (!seenDates.has(date)) {
       dateArray.push(date)
@@ -17,6 +27,8 @@ export function extractModificationsPerDay<T extends Record<string, any>>(
   keys: (keyof T)[],
   cumul?: boolean,
   selectedAuthor?: string,
+  fromMs?: number,
+  untilMs?: number,
 ): {
   date: string
   modifications: number
@@ -25,6 +37,12 @@ export function extractModificationsPerDay<T extends Record<string, any>>(
   for (let ic = 0; ic < commits.length; ic++) {
     for (let ik = 0; ik < keys.length; ik++) {
       if (selectedAuthor && selectedAuthor !== commits[ic].authorName) {
+        continue
+      }
+      if (fromMs && new Date(commits[ic].committedDate).getTime() < fromMs) {
+        continue
+      }
+      if (untilMs && new Date(commits[ic].committedDate).getTime() > untilMs) {
         continue
       }
       const date = commits[ic]['committedDate'].slice(0, 10)
@@ -36,7 +54,7 @@ export function extractModificationsPerDay<T extends Record<string, any>>(
     }
   }
 
-  const dates = extractDateLabels(commits)
+  const dates = extractDateLabels(commits, fromMs, untilMs)
   let modificationsPerDay = dates.map((date) => {
     return { date: date, modifications: mapDateModifications.get(date) ?? 0 }
   })
@@ -45,6 +63,38 @@ export function extractModificationsPerDay<T extends Record<string, any>>(
       modificationsPerDay[i - 1].modifications +=
         modificationsPerDay[i].modifications
     }
+  }
+
+  const oldestDate = new Date(
+    modificationsPerDay[modificationsPerDay.length - 1].date,
+  )
+  if (fromMs && oldestDate.getTime() > fromMs) {
+    oldestDate.setDate(oldestDate.getDate() - 1)
+    modificationsPerDay.push({
+      date: oldestDate.toISOString().split('T')[0],
+      modifications: 0,
+    })
+  }
+  if (fromMs && oldestDate.getTime() > fromMs) {
+    modificationsPerDay.push({
+      date: new Date(fromMs).toISOString().split('T')[0],
+      modifications: 0,
+    })
+  }
+
+  const latestDate = new Date(modificationsPerDay[0].date)
+  if (untilMs && latestDate.getTime() < untilMs) {
+    latestDate.setDate(latestDate.getDate() + 1)
+    modificationsPerDay.unshift({
+      date: latestDate.toISOString().split('T')[0],
+      modifications: 0,
+    })
+  }
+  if (untilMs && latestDate.getTime() < untilMs) {
+    modificationsPerDay.unshift({
+      date: new Date(untilMs).toISOString().split('T')[0],
+      modifications: 0,
+    })
   }
   return modificationsPerDay
 }
@@ -63,4 +113,17 @@ export function extractAuthors(
     avatarUrl: url,
   }))
   return authors
+}
+
+export function minMaxDates(commits: Record<string, any>[]): {
+  min: number
+  max: number
+} {
+  const dates = extractDateLabels(commits)
+  const datesNumber = dates.map((date) => new Date(date).getTime())
+  const minMax = {
+    min: Math.min.apply(null, datesNumber),
+    max: Math.max.apply(null, datesNumber),
+  }
+  return minMax
 }
