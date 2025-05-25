@@ -3,7 +3,7 @@ import { highlightSubSequence } from './globals/subSequence.js'
 import {
   extractModificationsPerDay,
   extractAuthors,
-  minMaxDates,
+  minMaxDatesMs,
 } from './globals/commits.js'
 import { slider } from './globals/slider.js'
 declare global {
@@ -39,7 +39,7 @@ declare global {
       update(event: Event): void
       init(): void
     }
-    minMaxDates(commits: Record<string, any>[]): { min: number; max: number }
+    minMaxDatesMs(commits: Record<string, any>[]): { min: number; max: number }
   }
 }
 
@@ -48,4 +48,4 @@ window.highlightSubSequence = highlightSubSequence
 window.extractModificationsPerDay = extractModificationsPerDay
 window.extractAuthors = extractAuthors
 window.slider = slider
-window.minMaxDates = minMaxDates
+window.minMaxDatesMs = minMaxDatesMs

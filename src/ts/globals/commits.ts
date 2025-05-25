@@ -115,7 +115,7 @@ export function extractAuthors(
   return authors
 }
 
-export function minMaxDates(commits: Record<string, any>[]): {
+export function minMaxDatesMs(commits: Record<string, any>[]): {
   min: number
   max: number
 } {
