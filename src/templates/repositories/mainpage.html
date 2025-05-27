@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Repositories</title>
+
+    <!-- Tailwind via CDN (good for dev) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- HTMX via CDN -->
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+
+    <!-- JS -->
+    <script type="module" src="/static/js/app.js"></script>
+    <!-- Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
+
+    <!-- Alpine -->
+    <script
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+      defer
+    ></script>
+    <style>
+      [x-cloak] {
+        display: none;
+      }
+
+      /* Hide default range styling */
+      input[type='range'] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        position: absolute;
+        background: transparent;
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      /* Custom track (hidden default) */
+      input[type='range']::-webkit-slider-runnable-track {
+        height: 2px;
+      }
+
+      /* Custom thumb styling (Centered) */
+      input[type='range']::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        background: white;
+        border: 3px solid #4f46e5;
+        border-radius: 50%;
+        cursor: pointer;
+        pointer-events: auto;
+        position: relative;
+        z-index: 3;
+        transform: translateY(-30%);
+      }
+
+      input[type='range']::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border: 3px solid #4f46e5;
+        border-radius: 50%;
+        cursor: pointer;
+        pointer-events: auto;
+        z-index: 3;
+        transform: translateY(-30%);
+      }
+
+      /* Centering the range input itself */
+      .slider-container {
+        position: relative;
+        height: 18px; /* Adjust height to fit thumb */
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100 p-8">
+    <h1 class="mb-4 text-center text-3xl font-bold text-indigo-600">
+      Repository commits analyser
+    </h1>
+
+    <div
+      x-data="{ repo_to_display_id: '' }"
+      x-effect="if (repo_to_display_id !== '') {setTimeout(() => {$el.dispatchEvent(new CustomEvent('repoChanged'))}, 0)}"
+      id="repo-root"
+    >
+      <div
+        hx-get="/repositories/get_repos"
+        hx-trigger="load"
+        hx-swap="outerHTML"
+      ></div>
+      <span
+        hx-get="/repositories/get_commits"
+        :hx-vals="JSON.stringify({repo_to_display_id})"
+        hx-trigger="repoChanged from:#repo-root"
+        hx-target="#commits-graph"
+        hx-swap="innerHTML"
+      ></span>
+      <div id="commits-graph" x-cloak x-show="repo_to_display_id !== ''"></div>
+    </div>
+  </body>
+</html>
