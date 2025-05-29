@@ -26,13 +26,7 @@ class ServiceEnv:
 
 BACKEND_IP = os.getenv("BACKEND_IP", "127.0.0.1")
 BACKEND_PORT = os.getenv("BACKEND_PORT", "8080")
-BACKEND_URL_V1 = (
-    f"http{'s' if ENV == ServiceEnv.production else ''}://"
-    + BACKEND_IP
-    + ":"
-    + BACKEND_PORT
-    + "/api/v1/"
-)
+BACKEND_URL_V1 = f"http://" + BACKEND_IP + ":" + BACKEND_PORT + "/api/v1/"
 
 
 class DateTimeFormat:
