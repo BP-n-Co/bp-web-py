@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-router = APIRouter(prefix="/")
+router = APIRouter(prefix="")
 
 
 class Pong(BaseModel):
