@@ -17,8 +17,11 @@ async def main_page(request: Request):
 @router.get("/get_repos", response_class=HTMLResponse)
 async def get_repositories(request: Request) -> HTMLResponse:
     fetch_url = BACKEND_URL_V1 + "repositories"
+    base_logger.info(f"fetching {fetch_url}")
     resp = requests.get(url=fetch_url).json()
+    base_logger.info(f"got {resp=}")
     resp_data = resp["data"]
+    base_logger.info(f"loading html with {resp_data=}")
     return templates.TemplateResponse(
         request=request,
         name="repositories.html",
