@@ -8,6 +8,6 @@ class Pong(BaseModel):
     text: str
 
 
-@router.get("", response_model=Pong)
+@router.get("/", response_model=Pong)
 async def ping():
     return Pong(text="pong")
