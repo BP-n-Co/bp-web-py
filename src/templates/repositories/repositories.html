@@ -1,6 +1,9 @@
 <!-- prettier-ignore-attribute (x-init) -->
 <div
   x-data="{
+    new_owner: '',
+    new_repo: '',
+    new_branch: '',
     repo_name: '',
     repo_owner: '',
     open: false,
@@ -14,6 +17,68 @@
   @click.outside="open = false"
   class="rounded-lg bg-white p-1 text-center shadow-md"
 >
+  <!-- Track new repository -->
+  <div class="mb-4 rounded-lg bg-white p-4 shadow-md">
+    <form
+      x-data="{ loading: false }"
+      @htmx:before-request="loading = true"
+      @htmx:after-request="loading = false"
+      hx-post="/repositories"
+      hx-target="#flash-message"
+      hx-swap="innerHTML"
+      class="flex flex-wrap items-center justify-end gap-2"
+    >
+      <span class="mr-auto font-semibold text-indigo-600">Track new repository:</span>
+
+      <input
+        type="text"
+        name="owner"
+        placeholder="Owner"
+        class="rounded-md border border-gray-300 p-2 text-sm"
+      />
+      <input
+        type="text"
+        name="name"
+        placeholder="Repository"
+        class="rounded-md border border-gray-300 p-2 text-sm"
+      />
+      <input
+        type="text"
+        name="branch"
+        placeholder="Branch"
+        class="rounded-md border border-gray-300 p-2 text-sm"
+      />
+      <button
+        type="submit"
+        class="flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 disabled:opacity-50"
+        :disabled="loading"
+      >
+        <svg
+          x-show="loading"
+          class="h-4 w-4 animate-spin text-white"
+          fill="none"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z"
+          ></path>
+        </svg>
+        <span x-text="loading ? 'Tracking...' : 'Track'"></span>
+      </button>
+    </form>
+  </div>
+  <div id="flash-message"></div>
   <div class="flex gap-2 rounded-sm border-gray-100 bg-gray-100 p-1">
     <span class="flex-1">Search for Repository</span>
     <input
