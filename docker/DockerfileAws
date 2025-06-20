@@ -1,0 +1,19 @@
+FROM python:3.11.12
+
+# Set working directory
+WORKDIR /app
+
+RUN apt-get update
+
+# Use requirements for python
+COPY ./requirements.txt requirements.txt
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+
+# source code
+COPY ./src src
+ENV PYTHONPATH=src
+
+
+# Default command just sleeps (we override it in entrypoint)
+CMD ["sleep", "infinity"]
