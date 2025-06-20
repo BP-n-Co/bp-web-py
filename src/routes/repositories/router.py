@@ -10,8 +10,20 @@ templates = Jinja2Templates(directory=templates_path / "repositories")
 
 
 @router.get("", response_class=HTMLResponse)
-async def hello_world(request: Request):
+async def load_mainpage(request: Request):
     return templates.TemplateResponse(request=request, name="mainpage.html")
+
+
+@router.post("")
+async def track_new_repo(request: Request):
+    form_raw = await request.form()
+    fetch_url = BACKEND_URL_V1 + "repositories"
+    resp = requests.post(url=fetch_url, json=dict(form_raw))
+    base_logger.info(resp.json())
+    if resp.status_code == 201:
+        return templates.TemplateResponse(request=request, name="track_success.html")
+    else:
+        return templates.TemplateResponse(request=request, name="track_fail.html")
 
 
 @router.get("/get_repos", response_class=HTMLResponse)
