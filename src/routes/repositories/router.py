@@ -10,12 +10,6 @@ templates = Jinja2Templates(directory=templates_path / "repositories")
 
 
 @router.get("", response_class=HTMLResponse)
-<<<<<<< HEAD
-async def hello_world(request: Request):
-    return templates.TemplateResponse(request=request, name="mainpage.html")
-
-
-=======
 async def load_mainpage(request: Request):
     return templates.TemplateResponse(request=request, name="mainpage.html")
 
@@ -32,7 +26,6 @@ async def track_new_repo(request: Request):
         return templates.TemplateResponse(request=request, name="track_fail.html")
 
 
->>>>>>> develop
 @router.get("/get_repos", response_class=HTMLResponse)
 async def get_repositories(request: Request) -> HTMLResponse:
     fetch_url = BACKEND_URL_V1 + "repositories"
