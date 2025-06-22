@@ -1,0 +1,21 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/DockerfileLocal
+    environment:
+      BACKEND_IP: host.docker.internal
+    ports:
+      - '${APP_PORT}:${APP_PORT}'
+    container_name: frontend
+    entrypoint:
+      [
+        'gunicorn',
+        'main:app',
+        '-k',
+        'uvicorn.workers.UvicornWorker',
+        '--workers',
+        '1',
+        '--bind',
+        '0.0.0.0:${APP_PORT}',
+      ]
